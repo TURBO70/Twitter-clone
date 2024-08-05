@@ -17,7 +17,7 @@ const app = express();
 
 app.use(express.json());
 
-const swaggerUi = require('swagger-ui-express');
+// const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require('./routes/swagger.json');
 
 //Mount Routes
