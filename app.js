@@ -12,7 +12,7 @@ const tweetRoute = require('./routes/tweet.routes');
 const { customError } = require("./utils/customError");
 
 db();
-
+ 
 const app = express();
 
 app.use(express.json());
