@@ -14,7 +14,7 @@ const { customError } = require("./utils/customError");
 db();
  
 const app = express();
-  
+
 app.use(express.json());
 
 // const swaggerUi = require('swagger-ui-express');
