@@ -9,6 +9,7 @@ const {db} = require("./config/db.config");
 
 const authRoute = require('./routes/auth.routes');
 const tweetRoute = require('./routes/tweet.routes');
+const notificationRoute = require('./routes/notifications.routes');
 const { customError } = require("./utils/customError");
 
 db();
@@ -23,6 +24,7 @@ app.use(express.json());
 //Mount Routes
 app.use("/auth", authRoute);
 app.use("/tweet", tweetRoute);
+app.use("/notifications", const { auth } = require('../middlewares/auth'););
 
 // Handel unhandelling Routes
 // app.all("*", (req, res, next) => {
