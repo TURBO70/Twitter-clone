@@ -94,6 +94,26 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
+const userReplies = asyncHandler(async (req, res) => {
+  let { userID } = req.query;
+  let tweets = await Tweet.find({ userID, repliedTo: { $ne: null } });
+  if (tweets) {
+    return res.send(tweets);
+  } else {
+    return next(customError("Not found", 404));
+  }
+});
+
+const userLikes = asyncHandler(async (req, res) => {
+  let { userID } = req.query;
+  let tweets = await Tweet.find({ userID: { $in: hearts } });
+  if (tweets) {
+    return res.send(tweets);
+  } else {
+    return next(customError("Not found", 404));
+  }
+});
+
 const getTweet = asyncHandler(async (req, res) => {
   let id = req.params.id;
 
@@ -133,5 +153,7 @@ module.exports = {
   unlikeTweet,
   getTweet,
   getReplies,
+  userReplies,
+  userLikes,
   newsfeed,
 };
