@@ -7,6 +7,10 @@ const tweetSchema = new mongoose.Schema({
     required: [true, "text required"],
     maxLenght: [200, "too much "],
   },
+  username: {
+    type: String,
+    required: [true, "username"],
+  },
   hearts: {
     type: Array,
     default: [],
@@ -27,7 +31,7 @@ const tweetSchema = new mongoose.Schema({
   userId: {
     type: String,
   },
-  repliedTo:moongose.Schema.Types.ObjectId,
+  repliedTo:mongoose.Schema.Types.ObjectId,
 });
 
 
