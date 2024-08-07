@@ -2,21 +2,29 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  createTweet,
+  postTweet,
   getTweets,
   likeTweet,
   unlikeTweet,
   getReplies,
-  getTweets,
   newsfeed,
   replyTweet,
   userReplies,
   userLikes,
 } = require("../controllers/tweet.controllers");
+
+const {
+  postTweetValidator,
+  getTweetsValidator,
+  replyTweetValidator,
+  likeTweetValidator,
+  unlikeTweetValidator,
+  userRepliesValidator,
+} = require("../utils/validators/tweetValidator");
 const { auth } = require("../middlewares/auth");
 
 // Route to create a tweet
-router.post("/postTweet", auth, createTweet);
+router.post("/postTweet", auth, postTweet);
 
 // Route to get tweets
 router.get("/getTweets", auth, getTweets);
@@ -36,11 +44,10 @@ router.post("/newsfeed", auth, newsfeed);
 // Route to reply to a tweet
 router.post("/replyTweet", auth, replyTweet);
 
-// Route to get user replies 
+// Route to get user replies
 router.get("/userReplies", auth, userReplies);
 
 // Route to get user likes
 router.get("/userLikes", auth, userLikes);
-
 
 module.exports = router;
