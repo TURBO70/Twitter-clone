@@ -4,7 +4,7 @@ const customError = require("../utils/customError");
 const User = require("../models/user.models");
 const emitter = require("../events");
 
-const createTweet = asyncHandler(async (req, res, next) => {
+const postTweet = asyncHandler(async (req, res, next) => {
   const tweet = {
     text: req.body.text,
     username: req.user.username,
@@ -146,7 +146,7 @@ const newsfeed = asyncHandler(async (req, res) => {
   res.send(tweets);
 });
 module.exports = {
-  createTweet,
+  postTweet,
   getTweets,
   replyTweet,
   likeTweet,
