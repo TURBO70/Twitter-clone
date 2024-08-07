@@ -1,4 +1,4 @@
-const Notification = require("../models/notification.model");
+const Notification = require("../models/notifications.models");
 const asyncHandler = require("express-async-handler");
 const customError = require("../utils/customError");
 const User = require("../models/user.models");
