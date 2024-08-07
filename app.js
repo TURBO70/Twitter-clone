@@ -24,7 +24,7 @@ app.use(express.json());
 //Mount Routes
 app.use("/auth", authRoute);
 app.use("/tweet", tweetRoute);
-app.use("/notifications", const { auth } = require('../middlewares/auth'););
+app.use("/notifications", notificationRoute);
 
 // Handel unhandelling Routes
 // app.all("*", (req, res, next) => {
