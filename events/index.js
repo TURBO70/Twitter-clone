@@ -1,5 +1,5 @@
 const EventEmitter = require("events");
-const Notification = require("../models/notification.model");
+const Notification = require("../models/notifications.models");
 
 class Emitter extends EventEmitter {}
 
