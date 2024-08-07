@@ -117,7 +117,6 @@ const getReplies = asyncHandler(async (req, res) => {
 });
 
 const newsfeed = asyncHandler(async (req, res) => {
-  
   let following = req.user.following;
 
   let tweets = await Tweet.find({
@@ -126,4 +125,13 @@ const newsfeed = asyncHandler(async (req, res) => {
   }).sort({ time: -1 });
   res.send(tweets);
 });
-module.exports = { createTweet, getTweets, replyTweet, likeTweet, unlikeTweet };
+module.exports = {
+  createTweet,
+  getTweets,
+  replyTweet,
+  likeTweet,
+  unlikeTweet,
+  getTweet,
+  getReplies,
+  newsfeed,
+};
