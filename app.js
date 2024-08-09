@@ -13,7 +13,7 @@ const notificationRoute = require('./routes/notifications.routes');
 const { customError } = require("./utils/customError");
 
 db();
-                   
+                    
 const app = express();
 
 app.use(express.json());
