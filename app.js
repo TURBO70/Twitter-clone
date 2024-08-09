@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/auth", authRoute);
 app.use("/tweet", tweetRoute);
 app.use("/notifications", notificationRoute);
-
+ 
 // Handel unhandelling Routes
 // app.all("*", (req, res, next) => {
 //   next(new customError(`Can't found this Route : ${req.originalUrl}`, 400));
