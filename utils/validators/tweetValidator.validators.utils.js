@@ -1,4 +1,4 @@
-const { check } = require("express-validator");
+const { check, query, param, body } = require("express-validator");
 const slugify = require("slugify");
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/user.models");
