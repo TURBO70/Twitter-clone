@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const customError = require("../utils/customError");
 const User = require("../models/user.models");
 const emitter = require("../events");
+const mongoose = require("mongoose");
 
 const postTweet = asyncHandler(async (req, res, next) => {
   const tweet = {
@@ -35,7 +36,7 @@ const replyTweet = asyncHandler(async (req, res, next) => {
   }
 
   let tweetData = {
-    _id: mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),  // Instantiate ObjectId correctly
     text,
     userID: req.user._id,
     hearts: [],
@@ -55,13 +56,13 @@ const replyTweet = asyncHandler(async (req, res, next) => {
       })
         .sort({ time: -1 })
         .then((res) => {
-          emitter.emit("reply", user.username, orgTweetID, res.user._id);
+          emitter.emit("reply", user.username, orgTweetID, req.user._id);
         });
       return res.send(resp);
     })
     .catch((e) => {
       console.log(e);
-      return res.send(e);
+      return res.status(500).send(e);  // Changed to 500 status code for server errors
     });
 });
 
@@ -104,15 +105,24 @@ const userReplies = asyncHandler(async (req, res) => {
   }
 });
 
-const userLikes = asyncHandler(async (req, res) => {
+const userLikes = asyncHandler(async (req, res, next) => {
   let { userID } = req.query;
-  let tweets = await Tweet.find({ userID: { $in: hearts } });
-  if (tweets) {
+
+  // Ensure userID is provided and is valid
+  // if (!userID) {
+  //   return next(new customError("UserID is required", 400));
+  // }
+
+  // Find tweets where the userID is in the hearts array
+  let tweets = await Tweet.find({ hearts: userID });
+
+  if (tweets.length > 0) {
     return res.send(tweets);
   } else {
-    return next(customError("Not found", 404));
+    return next(new customError("No tweets found", 404));
   }
 });
+
 
 const getTweet = asyncHandler(async (req, res) => {
   let id = req.params.id;
