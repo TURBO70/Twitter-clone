@@ -15,8 +15,8 @@ const signup = asyncHandler(async (req, res, next) => {
     password: req.body.password,
   });
   // 2- Creat token
-  const token = jwt.sign({ userId: user._id }, "r3yqr8", {
-    expiresIn: "1h",
+  const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE_TIME,
   });
   res.status(201).json({ data: user, token });
 });
@@ -36,8 +36,8 @@ const login = asyncHandler(async (req, res, next) => {
     return next(new customError("incorrect email or password", 401));
   }
 
-  const token = jwt.sign({ userId: user._id }, "secret", {
-    expiresIn: "1H",
+  const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    expiresIn:JWT_EXPIRE_TIME ,
   });
   res.status(200).json({ data: user, token });
 });
