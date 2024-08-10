@@ -2,7 +2,7 @@
 <p>This project is a Twitter clone application built with Express.js. It mimics the core functionalities of Twitter, allowing users to interact with tweets, follow other users, and manage their social connections. The application offers a comprehensive set of RESTful APIs for user management, tweet handling, and notifications.</p>
 
 ## Table of Contents
-
+- [API Documentation](https://documenter.getpostman.com/view/32787914/2sA3s1pCA4)
 - [Description](#description)
 - [Features](#features)
   - [User Authentication](#user-authentication)
