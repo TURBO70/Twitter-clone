@@ -11,6 +11,7 @@ const {
   replyTweet,
   userReplies,
   userLikes,
+  deleteTweet,
 } = require("../controllers/tweet.controllers");
 
 const {
@@ -49,5 +50,8 @@ router.get("/userReplies", auth, userReplies); //
 
 // Route to get user likes
 router.get("/userLikes", auth, userLikes); //
+
+// Route to delete a tweet
+router.delete("/deleteTweet", auth, deleteTweet); //
 
 module.exports = router;
