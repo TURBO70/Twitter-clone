@@ -20,34 +20,34 @@ const {
   likeTweetValidator,
   unlikeTweetValidator,
   userRepliesValidator,
-} = require("../utils/validators/tweetValidator");
+} = require("../utils/validators/tweetValidator.validators.utils");
 const { auth } = require("../middlewares/auth");
 
 // Route to create a tweet
-router.post("/postTweet", auth, postTweet);
+router.post("/postTweet", auth, postTweet); //
 
 // Route to get tweets
-router.get("/getTweets", auth, getTweets);
+router.get("/getTweets", auth, getTweets); //
 
 // Route to like a tweet
-router.post("/likeTweet", auth, likeTweet);
+router.post("/likeTweet", auth, likeTweet); //
 
 // Route to unlike a tweet
-router.post("/unlikeTweet", auth, unlikeTweet);
+router.post("/unlikeTweet", auth, unlikeTweet); //
 
 // Route to get replies
-router.get("/getReplies", auth, getReplies);
+router.get("/getReplies", auth, getReplies); //
 
 // Route to get newsfeed
-router.post("/newsfeed", auth, newsfeed);
+router.get("/newsfeed", auth, newsfeed);
 
 // Route to reply to a tweet
-router.post("/replyTweet", auth, replyTweet);
+router.post("/replyTweet", auth, replyTweet); //
 
 // Route to get user replies
-router.get("/userReplies", auth, userReplies);
+router.get("/userReplies", auth, userReplies); //
 
 // Route to get user likes
-router.get("/userLikes", auth, userLikes);
+router.get("/userLikes", auth, userLikes); //
 
 module.exports = router;
