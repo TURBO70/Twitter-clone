@@ -9,7 +9,7 @@ const tweetSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: [true, "username"],
+    // required: [true, "username"],
   },
   hearts: {
     type: Array,
