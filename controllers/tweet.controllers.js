@@ -36,7 +36,7 @@ const replyTweet = asyncHandler(async (req, res, next) => {
   }
 
   let tweetData = {
-    _id: new mongoose.Types.ObjectId(),  // Instantiate ObjectId correctly
+    _id: new mongoose.Types.ObjectId(), // Instantiate ObjectId correctly
     text,
     userID: req.user._id,
     hearts: [],
@@ -62,9 +62,32 @@ const replyTweet = asyncHandler(async (req, res, next) => {
     })
     .catch((e) => {
       console.log(e);
-      return res.status(500).send(e);  // Changed to 500 status code for server errors
+      return res.status(500).send(e); // Changed to 500 status code for server errors
     });
 });
+
+const deleteTweet = asyncHandler(async (req, res, next) => {
+  let { tweetID } = req.body;
+
+  if (!tweetID) {
+    return next(new customError("TweetID is required", 400));
+  }
+
+  
+  const tweet = await Tweet.findById(tweetID);
+  if (!tweet) {
+    return next(new customError("Tweet not found", 404));
+  }
+
+  if (tweet.username !== req.user.username) {
+    return next(new customError("You are not authorized to delete this tweet", 403));
+  }
+
+ 
+  await Tweet.findByIdAndDelete(tweetID);
+  res.status(200).json({ message: "Tweet deleted successfully" });
+});
+
 
 const likeTweet = asyncHandler(async (req, res, next) => {
   let { tweetID } = req.body;
@@ -123,7 +146,6 @@ const userLikes = asyncHandler(async (req, res, next) => {
   }
 });
 
-
 const getTweet = asyncHandler(async (req, res) => {
   let id = req.params.id;
 
@@ -166,4 +188,5 @@ module.exports = {
   userReplies,
   userLikes,
   newsfeed,
+  deleteTweet
 };
