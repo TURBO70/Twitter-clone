@@ -31,7 +31,7 @@ app.all("*", (req, res, next) => {
 });
 
 //Global error handelling middleware
-app.use(globalError);
+// app.use(globalError);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = 3000 || 8000;
