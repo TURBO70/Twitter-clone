@@ -3,7 +3,7 @@ const User = require('../models/user.models');
 const customError = require('../utils/customError');
 
 // Ensure that your secret key is loaded from environment variables
-const JWT_SECRET = "secret";
+const JWT_SECRET = process.env.SECRET_KEY;
 
 const auth = async (req, res, next) => {
   // Extract token from the Authorization header
