@@ -7,6 +7,9 @@ const {
   randomuser,
   editInfo,
   getUser,
+  forgotPassword,
+  verifyPassResetCode,
+  resetPassword,
 } = require("../controllers/authController.controllers");
 
 const {
@@ -18,19 +21,19 @@ const { auth } = require("../middlewares/auth");
 
 const router = require("express").Router();
 // Route to signup
-router.post("/signup", signupValidator, signup);
+router.post("/signup", signup); //
 
 // Route to login
-router.post("/login", loginValidator, login);
+router.post("/login", login); //
 
 //Route to follow
-router.post("/follow", auth, follow);
+router.post("/follow", auth, follow); //
 
 //Route to unfollow
-router.post("/unfollow", auth, unfollow);
+router.post("/unfollow", auth, unfollow); //
 
 //Route to search
-router.post("/search", auth, search);
+router.get("/search", auth, search);
 
 //Route to randomuser
 router.get("/randomuser", auth, randomuser);
@@ -39,6 +42,15 @@ router.get("/randomuser", auth, randomuser);
 router.post("/editInfo", auth, editInfo);
 
 //Route to getUser
-router.get("/getUser", auth, getUser);
+router.get("/getUser", auth, getUser); //
+
+//Route to forgotPassword
+router.post("/forgotPassword",auth, forgotPassword);
+
+//Route to verifyPassResetCode
+router.post("/verifyPassResetCode", verifyPassResetCode);
+
+//Route to resetPassword
+router.post("/resetPassword", resetPassword);
 
 module.exports = router;
