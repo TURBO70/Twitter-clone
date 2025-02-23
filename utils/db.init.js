@@ -1,4 +1,3 @@
-// utils/db.init.js
 const pool = require('../config/db.config');
 
 const initializeDatabase = async () => {
