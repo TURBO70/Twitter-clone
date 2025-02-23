@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const customError = require("../utils/customError");
 const pool = require("../config/db.config");
 const emitter = require("../events");
+const redis = require("../config/redisClient");
+
 
 const postTweet = asyncHandler(async (req, res, next) => {
   const query = `
@@ -22,12 +24,18 @@ const getTweets = asyncHandler(async (req, res, next) => {
     return next(customError("Not found", 401));
   }
 
-  const query = `
-    SELECT * FROM tweets 
-    WHERE username = $1 
-    ORDER BY time DESC
-  `;
+  const cacheKey = `tweets:${username}`;
+  
+  const cachedTweets = await redis.get(cacheKey);
+  if (cachedTweets) {
+    return res.status(200).json({ data: JSON.parse(cachedTweets) });
+  }
+
+  const query = `SELECT * FROM tweets WHERE username = $1 ORDER BY time DESC`;
   const { rows } = await pool.query(query, [username]);
+
+  await redis.setex(cacheKey, 3600, JSON.stringify(rows));
+
   res.status(200).json({ data: rows });
 });
 
@@ -85,10 +93,7 @@ const deleteTweet = asyncHandler(async (req, res, next) => {
     return next(customError("TweetID is required", 400));
   }
 
-  const checkQuery = `
-    SELECT * FROM tweets 
-    WHERE id = $1
-  `;
+  const checkQuery = `SELECT * FROM tweets WHERE id = $1`;
   const tweet = await pool.query(checkQuery, [tweetID]);
 
   if (tweet.rows.length === 0) {
@@ -99,13 +104,14 @@ const deleteTweet = asyncHandler(async (req, res, next) => {
     return next(customError("You are not authorized to delete this tweet", 403));
   }
 
-  const deleteQuery = `
-    DELETE FROM tweets 
-    WHERE id = $1
-  `;
+  const deleteQuery = `DELETE FROM tweets WHERE id = $1`;
   await pool.query(deleteQuery, [tweetID]);
+
+  await redis.del(`tweets:${req.user.username}`);
+
   res.status(200).json({ message: "Tweet deleted successfully" });
 });
+
 
 const likeTweet = asyncHandler(async (req, res, next) => {
   const { tweetID } = req.body;
@@ -164,19 +170,24 @@ const userReplies = asyncHandler(async (req, res, next) => {
 
 const userLikes = asyncHandler(async (req, res, next) => {
   const { userID } = req.query;
+  const cacheKey = `likes:${userID}`;
 
-  const query = `
-    SELECT * FROM tweets
-    WHERE hearts::jsonb ? $1
-  `;
+  const cachedLikes = await redis.get(cacheKey);
+  if (cachedLikes) {
+    return res.json(JSON.parse(cachedLikes));
+  }
+
+  const query = `SELECT * FROM tweets WHERE hearts::jsonb ? $1`;
   const { rows } = await pool.query(query, [userID]);
 
   if (rows.length > 0) {
+    await redis.setex(cacheKey, 3600, JSON.stringify(rows));
     res.json(rows);
   } else {
     return next(customError("No tweets found", 404));
   }
 });
+
 
 const getTweet = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
@@ -196,19 +207,24 @@ const getTweet = asyncHandler(async (req, res, next) => {
 
 const getReplies = asyncHandler(async (req, res, next) => {
   const { tweetID } = req.body;
-  
-  const query = `
-    SELECT * FROM tweets
-    WHERE replied_to_id = $1
-  `;
+  const cacheKey = `replies:${tweetID}`;
+
+  const cachedReplies = await redis.get(cacheKey);
+  if (cachedReplies) {
+    return res.json(JSON.parse(cachedReplies));
+  }
+
+  const query = `SELECT * FROM tweets WHERE replied_to_id = $1`;
   const { rows } = await pool.query(query, [tweetID]);
 
   if (rows.length > 0) {
+    await redis.setex(cacheKey, 3600, JSON.stringify(rows));
     res.json(rows);
   } else {
     return next(customError("Not found", 404));
   }
 });
+
 
 const newsfeed = asyncHandler(async (req, res) => {
   const query = `
@@ -220,6 +236,7 @@ const newsfeed = asyncHandler(async (req, res) => {
   const { rows } = await pool.query(query, [req.user.following]);
   res.json(rows);
 });
+
 
 module.exports = {
   postTweet,
