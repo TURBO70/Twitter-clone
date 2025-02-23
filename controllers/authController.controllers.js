@@ -14,7 +14,7 @@ const signup = asyncHandler(async (req, res, next) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    // Create user
+   
     const query = `
       INSERT INTO users (username, email, password, created_at)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
@@ -24,7 +24,7 @@ const signup = asyncHandler(async (req, res, next) => {
     
     const { rows: [user] } = await client.query(query, values);
 
-    // Create token
+    
     const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
       expiresIn: process.env.JWT_EXPIRE_TIME,
     });
