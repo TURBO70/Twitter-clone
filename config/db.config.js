@@ -1,9 +1,12 @@
-const mongoose = require("mongoose");
+const { Pool } = require('pg');
+require('dotenv').config();
 
-module.exports.db = () => {
-  mongoose.connect("mongodb://127.0.0.1:27017/Twitter").then(() => {
-    console.log("Database connected");
-  }).catch((error) => {
-    console.error("Database connection error:", error);
-  });
-};
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT || 5432
+});
+
+module.exports = pool;
