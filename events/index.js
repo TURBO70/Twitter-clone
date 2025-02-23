@@ -1,56 +1,35 @@
 const EventEmitter = require("events");
-const Notification = require("../models/notifications.models");
+const pool = require("../config/db.config"); // PostgreSQL pool connection
 
 class Emitter extends EventEmitter {}
 
 const emitter = new Emitter();
 
-emitter.on("follow", (username, client) => {
-  let notification = new Notification({
-    text: "started following you",
-    username: username,
-    link: `/${username}`,
-    client: client,
-    time: new Date(),
-    read: false,
-  });
+const saveNotification = async (text, username, link, client) => {
+  try {
+    const query = `
+      INSERT INTO notifications (text, username, link, client, time, read)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+    `;
+    const values = [text, username, link, client, new Date(), false];
 
-  notification
-    .save()
-    .then((res) => console.log(res))
-    .catch((e) => console.log(e));
+    const result = await pool.query(query, values);
+    console.log("Notification saved:", result.rows[0]);
+  } catch (error) {
+    console.error("Error saving notification:", error);
+  }
+};
+
+emitter.on("follow", (username, client) => {
+  saveNotification("started following you", username, `/${username}`, client);
 });
 
 emitter.on("like", (username, tweetID, client) => {
-  let notification = new Notification({
-    text: "liked your tweet",
-    username: username,
-    link: `/status/${tweetID}`,
-    client: client,
-    time: new Date(),
-    read: false,
-  });
-
-  notification
-    .save()
-    .then((res) => console.log(res))
-    .catch((e) => console.log(e));
+  saveNotification("liked your tweet", username, `/status/${tweetID}`, client);
 });
 
 emitter.on("reply", (username, tweetID, client) => {
-  let notification = new Notification({
-    text: "replied to your tweet",
-    username: username,
-    link: `/status/${tweetID}`,
-    client: client,
-    time: new Date(),
-    read: false,
-  });
-
-  notification
-    .save()
-    .then((res) => console.log(res))
-    .catch((e) => console.log(e));
+  saveNotification("replied to your tweet", username, `/status/${tweetID}`, client);
 });
 
 module.exports = emitter;
