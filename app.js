@@ -2,7 +2,6 @@ const express = require("express");
 
 const dotenv = require("dotenv");
 
-const { db } = require("./config/db.config");
 
 // const globalError = require("./middlewares/errorMiddleware");
 
@@ -11,7 +10,12 @@ const tweetRoute = require("./routes/tweet.routes");
 const notificationRoute = require("./routes/notifications.routes");
 const { customError } = require("./utils/customError");
 
-db();
+const { initializeDatabase } = require('./utils/db.init');
+
+// Add this near the start of your app initialization
+initializeDatabase()
+  .then(() => console.log('Database initialized'))
+  .catch(err => console.error('Database initialization failed:', err));
 
 const app = express();
 
@@ -26,9 +30,9 @@ app.use("/tweet", tweetRoute);
 app.use("/notifications", notificationRoute);
 
 // Handel unhandelling Routes
-app.all("*", (req, res, next) => {
-  next(new customError(`Can't found this Route : ${req.originalUrl}`, 400));
-});
+// app.all("*", (req, res, next) => {
+//   next(new customError(`Can't found this Route : ${req.originalUrl}`, 400));
+// });
 
 //Global error handelling middleware
 // app.use(globalError);
