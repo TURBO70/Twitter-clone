@@ -1,59 +1,63 @@
 ## Description
-<p>This project is a Twitter clone application built with Express.js. It mimics the core functionalities of Twitter, allowing users to interact with tweets, follow other users, and manage their social connections. The application offers a comprehensive set of RESTful APIs for user management, tweet handling, and notifications.</p>
+<p>This project is a Twitter clone application built with Express.js, utilizing PostgreSQL for data storage, Redis for real-time features, and Docker for containerization. It mimics core Twitter functionalities including tweet management, user interactions, and notifications through a RESTful API.</p>
 
 ## Table of Contents
 - [API Documentation](https://documenter.getpostman.com/view/32787914/2sA3s1pCA4)
-- [Description](#description)
+- [Key Technologies](#key-technologies)
 - [Features](#features)
   - [User Authentication](#user-authentication)
   - [Social Interactions](#social-interactions)
   - [Tweet Management](#tweet-management)
   - [Notifications](#notifications)
 - [Project Structure](#project-structure)
-- [Installation Steps](#installation-steps)
+- [Installation with Docker](#Installation-Steps)
 - [Contributing](#contributing)
 
-<h2>Features</h2>
+## Key Technologies
+- **Backend Framework**: Express.js
+- **Database**: PostgreSQL
+- **Caching & Real-time**: Redis
+- **Containerization**: Docker
+- **File Storage**: Cloudinary
+- **API Documentation**: Postman
 
-<h3> User Authentication</h3>
+## Features
 
-* Signup: Register new users with email and password.
-* Login: Authenticate users and provide access tokens.
-* Password Management: Includes password recovery and reset functionality.
-* Profile Management: Edit user information and view user profiles.
+### User Authentication
+- Secure JWT-based authentication system
+- Email/password registration and login
+- Password recovery and reset functionality
+- Profile management with avatar uploads
 
-<h3>Social Interactions</h3>
+### Social Interactions
+- Follow/Unfollow system
+- User search functionality
+- Random user suggestions
 
-* Follow/Unfollow: Users can follow or unfollow other users.
-* Search: Find users by username or other criteria.
-* Random User: Retrieve profiles of random users.
+### Tweet Management
+- Tweet creation with media uploads
+- Newsfeed and timeline systems
+- Like/Unlike functionality
+- Reply threads and conversation tracking
 
-<h3>Tweet Management</h3>
+### Notifications
+- Real-time notifications using Redis
+- Notification history and management
+- Mark-as-read functionality
 
-* Post Tweet: Create new tweets.
-* Retrieve Tweets: Access tweets from the user's timeline or newsfeed.
-* Like/Unlike Tweets: Interact with tweets by liking or unliking them.
-* Reply to Tweets: Respond to tweets from other users.
-* Get Replies: View replies to specific tweets.
-* User Replies and Likes: Retrieve tweets liked by the user and replies they have made.
-
-<h3>Notifications</h3>
-
-* Retrieve Notifications: Get a list of notifications related to user activity.
-* Mark as Read: Update notifications to indicate they have been read.
-
-## Project structure
- ```powershell
-src/
+## Project Structure
+```powershell
+twitter-clone/
 ├── config/
 │   ├── cloudinary.js
 │   ├── db.config.js
-│   └── multer.js
+│   ├── multer.js
+│   └── redisCache.js
 │
 ├── controllers/
-│   ├── authController.controllers.js
-│   ├── notifications.controllers.js
-│   └── tweet.controllers.js
+│   ├── authController.Controllers.js
+│   ├── notifications.Controllers.js
+│   └── tweet.Controllers.js
 │
 ├── events/
 │   └── index.js
@@ -63,54 +67,70 @@ src/
 │   ├── errorMiddleware.js
 │   └── validatorMiddleware.js
 │
-├── models/
-│   ├── notifications.models.js
-│   ├── tweet.models.js
-│   └── user.models.js
-│
 ├── routes/
 │   ├── auth.routes.js
 │   ├── notifications.routes.js
 │   └── tweet.routes.js
 │
 ├── utils/
+│   ├── validators/
+│   │   ├── authValidator.js
+│   │   └── tweetValidator.validators.js
 │   ├── customError.js
-│   ├── sendEmail.js
-│   └── validators/
-│       ├── authValidator.js
-│       └── tweetValidator.validators.js
+│   ├── db.init.js
+│   └── sendEmail.js
+│
+├── env/
+├── docker/
+│   └── Dockerfile
 │
 ├── .gitignore
 ├── app.js
+├── docker-compose.yml
 ├── package-lock.json
 └── package.json
 ```
+## 🛠️ Installation Steps
 
-## 🛠️ Installation Steps:
+<p>1. Clone the repository:</p>
 
-<p>1. Clone the Repository:</p>
-
-```
-git clone https://github.com/TURBO70/twitter-clone.git
-```
-
-<p>2. Navigate to the Project Directory:</p>
-
-```
-cd twitter-clone
+```bash
+git clone https://github.com/TURBO70/Twitter-clone.git
 ```
 
-<p>3. Install Dependencies:</p>
+<p>2. Navigate to the project directory:</p>
 
-```
-npm install
-```
-
-<p>4. Start the Application:</p>
-
-```
-npm start
+```bash
+cd Twitter-clone
 ```
 
+<p>3. Set up environment variables:</p>
+
+```bash
+cp .env.example .env
+```
+Edit the `.env` file with your credentials (PostgreSQL, Redis, and Cloudinary details).
+
+<p>4. Start the application using Docker Compose:</p>
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+- Start PostgreSQL database container
+- Initialize Redis server container
+- Build and run the Express.js application
+- Automatically set up database schemas
+- Enable hot-reload for development
+
+
+
+## Key features of this installation method:
+- No separate database installation required
+- All dependencies containerized
+- Automatic schema migrations
+- Redis caching pre-configured
+- Isolated development environment
 ## Contributing
 <p>Contributions are welcome! Please submit issues or pull requests to improve the project. For major changes or feature requests, open an issue first to discuss the changes you'd like to make.</p>
