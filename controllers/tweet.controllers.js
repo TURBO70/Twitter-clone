@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const customError = require("../utils/customError");
 const pool = require("../config/db.config");
 const emitter = require("../events");
-const redis = require("../config/redisClient");
+const redis = require("../config/redisCache");
 
 
 const postTweet = asyncHandler(async (req, res, next) => {
