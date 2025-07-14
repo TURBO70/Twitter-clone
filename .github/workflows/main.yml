@@ -21,7 +21,7 @@ jobs:
       - name: 🧪 Run tests
         run: npm test
 
-      - name: 📝 Make a change (example: update timestamp)
+      - name: 📝 Make a change (update timestamp)
         run: |
           date > timestamp.txt
           git config user.name github-actions
